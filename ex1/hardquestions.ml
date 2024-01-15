@@ -24,6 +24,15 @@ let rec eval = fun e -> (* expression -> value *)
     | Times(e,f) -> oper (fun x y -> x * y) (fun x y -> true) (eval e) (eval f)
     | Divides(e,f) -> oper (/) (fun x y -> x mod y = 0) (eval e) (eval f);;
 
+
+(*let rec eval = fun e ->
+    match e with
+    | Value(x) -> x
+    | Add(e,f) -> (eval e) + (eval f)
+    | Minus(e,f) -> (eval e) - (eval f)
+    | Times(e,f) -> (eval e) * (eval f)
+    | Divides(e,f) -> *)
+
 let rec expr_to_str = fun e ->
     match e with
     | Value(x) -> string_of_int x
@@ -77,7 +86,7 @@ let rec count_equal_exprs = fun l_exprs r_exprs ->
         let x = eval e in
         let y = eval f in
         if x != NaN && y != NaN && x = y then (
-            (* ignore (print_endline ((expr_to_str e) ^ " = " ^ (expr_to_str f))); *)
+            (*ignore (print_endline ((expr_to_str e) ^ " = " ^ (expr_to_str f)));*)
             1 + (count_equal_exprs l_exprs' r_exprs) + (count_equal_exprs l_exprs r_exprs')
         )
         else
@@ -97,5 +106,8 @@ let rec arithmetic_hell_parts = fun parts ->
 let rec arithmetic_hell = fun lst ->
     arithmetic_hell_parts (get_all_partitions lst);;
 
-arithmetic_hell[1;2;3;4;5;6;7;8;9;10;1;2;3;4;5;6;7;8;9;10];;
+(*let exprs =  all_exprs [8;5;3;1;15];;
+List.iter (fun e -> print_endline (expr_to_str e)) exprs;;
+print_endline (string_of_int (List.length exprs));;*)
 
+(*print_int (arithmetic_hell[4;2;2]);;*)
