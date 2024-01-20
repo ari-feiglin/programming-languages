@@ -1,0 +1,103 @@
+\input pdfToolbox
+
+\setlayout{horizontal margin=2cm, vertical margin=2cm}
+\parindent=0pt
+\parskip=3pt plus 2pt minus 2pt
+
+\input ../preamble
+
+\footline={}
+
+\setcounter{section}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\printmcount{\the\counter{section}.\the\counter{math counter}}
+
+{\bppbox{rgb{.5 1 .5}}{rgb{0 .4 0}}{rgb{.1 .4 0}}
+
+    \centerline{\setfontandscale{bf}{20pt}Programming Languages}
+    \smallskip
+    \centerline{\setfont{it}Homework \the\counter{section}}
+    \centerline{\setfont{it}Amit Moshcovitz and Ari Feiglin}
+
+\eppbox}
+
+\setscale{10pt}
+
+\newfunc{len}{{\tt len}}({})
+\newfunc{append}{{\tt append}}({})
+\bexerc
+
+    For the relevant code, prove that for every $x,y$ of type {\tt sequence},
+    $$ \lenof{\append\ x\ y} = \lenof x + \lenof y $$
+
+\eexerc
+
+\Proof by induction on $x$.
+For $x={\tt Empty}$, $\append\ x\ y=y$ and so $\lenof{\append\ x\ y}=\lenof y$.
+And $\lenof x=0$ so $\lenof x+\lenof y=\lenof y=\lenof{\append\ x\ y}$ as required.
+
+Now, if $x={\tt Cons}(v,x')$ then $\append\ x\ y={\tt Cons}(v, \append\ x'\ y)$ and so
+$\lenof{\append\ x\ y}=1+\lenof{\append\ x'\ y}$ which by induction is equal to
+$1+\lenof{x'}+\lenof y$.
+And $\lenof x=1+\lenof{x'}$, so $\lenof{\append\ x\ y}=\lenof x+\lenof y$ as required.
+
+\bexerc
+
+    For the relevant code, show that for every $t$ of type {\tt btree}, the height of $t$ is at
+    least the length of the longest path from the root of $t$ to a leaf.
+
+\eexerc
+
+\newfunc{height}{{\tt height}}({})
+
+\Proof by induction on $t$.
+If $t={\tt Empty}$ then $\heightof t=0$ and the length of the path from the root of $t$ to a leaf
+is also $0$, so the inequality is satisfied.
+Now if $t={\tt Node}(v,t_1,t_2)$ then $\heightof t=1+\maxof{\heightof{t_1},\heightof{t_2}}$, and so
+by induction this is at least $\geq1+\maxof{\abs{P}}[\hbox{$P$ is a path in $t_i$}]$, where the
+maximum is taken over all paths starting from a root of some $t_i$ and ending at a leaf.
+Where $\abs{\hbox{path in $t_i$}}$ is the length of a path from the root of $t_i$ to a leaf.
+A path from the root of $t$ to a leaf must be contained (other than the root) in $t_1$ or $t_2$,
+and so has a length of $1+\abs P$ for some path $P$ from the root of a $t_i$ to a leaf, and thus
+has a length bound by $1+\maxof[P]{\abs P}\leq\heightof t$ as required.
+
+\newfunc{nv}{{\tt num\_of\_vars}}({})
+\newfunc{nc}{{\tt num\_of\_connectives}}({})
+\bexerc
+
+    For the relevant code, prove or disprove
+    \benum
+        \item for every ${\tt exp}$ of type ${\tt bool\_expr}$,
+        $$ \nvof{\tt exp} = \ncof{\tt exp} + 1 $$
+        \item for every ${\tt exp}$ of type ${\tt bool\_expr}$ not containing ${\tt Not}$,
+        $$ \nvof{\tt exp} = \ncof{\tt exp} + 1 $$
+    \eenum
+
+\eexerc
+
+\mathcode`"="722
+
+\benum
+    \item This is false: take ${\tt exp}={\tt Not}("x")$.
+    Then $\nvof{\tt exp}=1$ and $\ncof{\tt exp}=1$.
+
+    \item This is true: proof by induction on ${\tt exp}$.
+    For ${\tt exp}={\tt Var}("x")$, $\nvof{\tt exp}=1$ and we get $\ncof{\tt exp}=0$ as required.
+    Otherwise, ${\tt exp}=\circ({\tt e}_1,{\tt e}_2)$ for $\circ\in\set{{\tt And},{\tt Or}}$.
+    And so by induction
+    \multlines{
+        \nvof{\tt exp} = \nvof{{\tt e}_1} + \nvof{{\tt e}_2}\cr
+        &= 2 + \ncof{{\tt e}_1} + \ncof{{\tt e}_2}
+    }
+    And
+    \multlines{
+        \ncof{\tt exp} = 1 + \ncof{{\tt e}_1} + \ncof{{\tt e}_2}\cr
+        &= 1 + \nvof{\tt exp}
+    }
+    as required.
+\eenum
+
+\bye
+
