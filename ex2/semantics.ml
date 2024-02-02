@@ -41,14 +41,16 @@ let rec nos c = match c with
             s
         )
     | (If_Ass(v, e, o, o'),s) -> (
-        if aritmetic_semantic e s != 0 then
-            nos(o, nos(Ass(v, e), s))
+        let s' = nos(Ass(v, e), s) in
+        if s' v != 0 then
+            nos(o, s')
         else
-            nos(o', nos(Ass(v, e), s))
+            nos(o', s')
         )
     | (Repeat(b, o), s) -> (
-        if boolean_semantic b s then
-            nos(o, s)
+        let s' = nos(o, s) in
+        if boolean_semantic b s' then
+            s'
         else
-            nos(Repeat(b, o), nos(o, s))
+            nos(Repeat(b, o), s')
         );;
