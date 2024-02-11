@@ -26,5 +26,5 @@ type stm =
     | If of b * stm * stm
     | While of b * stm
     | If_Ass of var * a * stm * stm
-    | Repeat of b * stm;;
+    | Repeat of stm * b;;
 

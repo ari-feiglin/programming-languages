@@ -47,10 +47,10 @@ let rec nos c = match c with
         else
             nos(o', s')
         )
-    | (Repeat(b, o), s) -> (
+    | (Repeat(o, b), s) -> (
         let s' = nos(o, s) in
         if boolean_semantic b s' then
             s'
         else
-            nos(Repeat(b, o), s')
+            nos(Repeat(o, b), s')
         );;
