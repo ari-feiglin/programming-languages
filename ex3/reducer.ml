@@ -69,6 +69,7 @@ let rec reduce_cbv = function
 let rec reduce_cbn = function
     | Variable(x) -> None
     | Abstraction(x,t) -> None
+    | Application(Variable(_),_) -> None
     | Application(Abstraction(x,t1),t2) -> Some(substitute x t2 t1)
     | Application(t1,t2) -> Some (Application(reduce_cbn t1 |> extract_some, t2))
 
