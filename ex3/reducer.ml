@@ -23,10 +23,10 @@ let rec fv = function
     | Abstraction(x,t) -> StringSet.remove x (fv t)
     | Application(t1,t2) -> StringSet.union (fv t1) (fv t2);;
 
-let rec var = function
+(*let rec var = function
     | Variable(x) -> StringSet.singleton x
     | Abstraction(x,t) -> StringSet.add x (var t)
-    | Application(t1,t2) -> StringSet.union (var t1) (var t2);;
+    | Application(t1,t2) -> StringSet.union (var t1) (var t2);;*)
 
 
 let extract_some = function
@@ -47,7 +47,7 @@ let rec substitute = fun x s t -> match t with
         else
             if StringSet.mem y (fv s) then
                 (* potentially fix this *)
-                let z = fresh_var (StringSet.add x (StringSet.union (var t) (var s))) in
+                let z = fresh_var (StringSet.add x (StringSet.union (fv t) (fv s))) in
                 Abstraction(z, substitute x s (substitute y (Variable(z)) t1))
             else
                 Abstraction(y, substitute x s t1)
